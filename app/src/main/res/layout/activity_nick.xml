@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context="com.example.spaceinvaders.Nick"
+    android:background="@drawable/space"
+    >
+
+    <TextView
+        android:id="@+id/TypeNick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Type your nick:"
+        android:textColor="@color/colorAccent"
+        android:textSize="25dp" />
+
+    <EditText
+        android:id="@+id/editTextNick"
+        android:layout_width="200dp"
+        android:layout_height="18dp"
+        android:layout_margin="5dp"
+        android:background="#ffffff"
+        android:hint="Enter your nick here"
+        android:inputType="text"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Save" />
+
+</LinearLayout>
