@@ -17,8 +17,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Leaderboard extends AppCompatActivity {
 
@@ -27,65 +29,69 @@ public class Leaderboard extends AppCompatActivity {
     TextView myText;
     Button comeback;
     ListView myListView;
+    TextView textNick;
+    TextView textScore;
 
-    FirebaseDatabase database;
-    DatabaseReference myRef;
 
-    ArrayList<String> users = new ArrayList<>();
+    private DatabaseReference myRef;
 
-    ArrayAdapter<String> arrayAdapter;
+    List<User> userList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
 
-        // Write a message to the database
-        database = FirebaseDatabase.getInstance();
-        myRef = database.getReference();
+        myRef = FirebaseDatabase.getInstance().getReference();
 
         // Set widgets
         comeback = (Button) findViewById(R.id.b_comeback);
         myText = (TextView) findViewById(R.id.TextLeaderboard);
         B1 = (TextView) findViewById(R.id.b_comeback);
-        myListView = (ListView) findViewById(R.id.leaderboard);
+        myListView = (ListView) findViewById(R.id.leaderboardList);
+        textNick = (TextView) findViewById(R.id.textNick);
+        textScore = (TextView) findViewById(R.id.textScore);
 
-        myRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        userList = new ArrayList<>();
 
         // Set fonts
         myFont = Typeface.createFromAsset(this.getAssets(), "Fonts/ca.ttf");
         myText.setTypeface(myFont);
         B1.setTypeface(myFont);
+        textNick.setTypeface(myFont);
+        textScore.setTypeface(myFont);
 
         comeback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 comeBack();
+            }
+        });
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                userList.clear();
+
+                for(DataSnapshot userSnapshot: dataSnapshot.getChildren()){
+                    User user = userSnapshot.getValue(User.class);
+                    userList.add(user);
+                }
+
+                LeaderboardList adapter = new LeaderboardList(Leaderboard.this,userList);
+
+                myListView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }
@@ -97,3 +103,12 @@ public class Leaderboard extends AppCompatActivity {
         startActivity(intent);
     }
 }
+
+
+
+
+
+
+
+
+
