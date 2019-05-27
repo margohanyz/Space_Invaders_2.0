@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -21,12 +22,17 @@ public class GameOver extends AppCompatActivity implements View.OnClickListener{
     Button save;
     Button tryagain;
     Button back;
-
+    String a;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_gameover);
 
+        Intent intent = getIntent();
+
+        a = intent.getStringExtra("jeden");
+       // Log.d("Tojeststring", "co" + a);
         // Set widgets
         save = (Button) findViewById(R.id.b_save);
         tryagain = (Button) findViewById(R.id.b_tryagain);
@@ -75,9 +81,12 @@ public class GameOver extends AppCompatActivity implements View.OnClickListener{
 
         if(v == tryagain)
         {
+
             finish();
-            Intent intent = new Intent(this, Play.class);
+            Intent intent = new Intent(this, Game.class);
             startActivity(intent);
+            //Intent intent = new Intent(this, Play.class);
+            //startActivity(intent);
         }
 
         if(v == back)

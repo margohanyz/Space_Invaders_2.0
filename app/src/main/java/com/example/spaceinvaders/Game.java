@@ -1,19 +1,25 @@
 package com.example.spaceinvaders;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 public class Game extends AppCompatActivity {
     SpaceInvadersView spaceInvadersView;
-
+    private static Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mContext = this.getApplicationContext();
         // Get a Display object to access screen details
         Display display = getWindowManager().getDefaultDisplay();
         // Load the resolution into a Point object
@@ -43,8 +49,20 @@ public class Game extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
+
         // Tell the gameView pause method to execute
         spaceInvadersView.pause();
+    }
+
+    protected static void zakoncz(Context mContext, int score){
+
+        //finish();
+        Log.d("Zakoncz", String.valueOf(score));
+        Intent intent = new Intent(mContext, GameOver.class);
+        String scoret = Integer.toString(score);
+        intent.putExtra("jeden",scoret);
+        mContext.startActivity(intent);
+
     }
 
 }

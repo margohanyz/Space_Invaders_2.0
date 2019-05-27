@@ -70,8 +70,10 @@ public class Play extends AppCompatActivity implements View.OnClickListener {
 
         /////////////////////////
         finish();
-        Intent intent = new Intent(this, GameOver.class);
+        Intent intent = new Intent(this, Game.class);
         startActivity(intent);
+        //Intent intent = new Intent(this, GameOver.class);
+        //startActivity(intent);
     }
 
     private void showLeaderboard(){

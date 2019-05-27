@@ -1,18 +1,21 @@
 package com.example.spaceinvaders;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.ImageView;
 
 import java.io.IOException;
 
@@ -22,7 +25,8 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
 
     // This is our thread
     private Thread gameThread = null;
-
+    private boolean lock = false;
+    private boolean lock2 = false;
     // Our SurfaceHolder to lock the surface before we draw our graphics
     private SurfaceHolder ourHolder;
 
@@ -51,7 +55,8 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
     // The players ship
     private PlayerShip playerShip;
     private DrugiShip druga;
-
+    private buttonreplay button;
+    private buttongo button2;
     // The player's bullet
     private Bullet bullet;
     private Bullet bullet2;
@@ -144,6 +149,14 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
     }
 
     private void prepareLevel(){
+        score = 0;
+        score2 = 0;
+        lives = 3;
+        lives2 = 3;
+        lock=false;
+        lock2=false;
+        button = new buttonreplay(context, screenX, screenY);
+        button2 = new buttongo(context, screenX, screenY);
         Log.e("Screen:" + screenY, "tutaj");
         playerShip = new PlayerShip(context, screenX, screenY);
         druga = new DrugiShip(context, screenX, screenY);
@@ -203,7 +216,8 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
     }
 
     private void update(){
-
+        paint.setColor(Color.argb(255,  249, 129, 0));
+        paint.setTextSize(100);
         // Did an invader bump into the side of the screen
         boolean bumped = false;
 
@@ -323,20 +337,15 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
                         invaders[i].setInvisible();
                         soundPool.play(invaderExplodeID, 1, 1, 0, 0, 1);
                         bullet.setInactive();
-                        if(bullet.align()==0) {
+
                             score = score + 10;
-                        }
-                        if (bullet.align()==1){
-                            score2=score2 + 10;
-                        }
+
                         // Has the player won
-                        if(score == numInvaders * 10){
+                        if(score > 4000){
+                            lock=true;
                             paused = true;
-                            score = 0;
-                            score2 = 0;
-                            lives = 3;
-                            lives2 = 3;
-                            prepareLevel();
+
+                          //  prepareLevel();
                         }
                     }
                 }
@@ -350,20 +359,21 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
                         invaders[i].setInvisible();
                         soundPool.play(invaderExplodeID, 1, 1, 0, 0, 1);
                         bullet2.setInactive();
-                        if(bullet2.align()==0) {
-                            score = score + 10;
-                        }
-                        if (bullet2.align()==1){
+
                             score2=score2 + 10;
-                        }
+
                         // Has the player won
-                        if(score > 100/*numInvaders * 10*/){
+                        if(score > 4000/*numInvaders * 10*/){
+                            lock=true;
                             paused = true;
-                            score = 0;
-                            score2 = 0;
-                            lives = 3;
-                            lives2 = 3;
-                            prepareLevel();
+
+                        //    prepareLevel();
+                        }
+                        if(score2>4000){
+                            lock2=true;
+                            paused = true;
+
+
                         }
                     }
                 }
@@ -379,21 +389,17 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
                     bullet.setInactive();
                         score = score + 50;
                         lives2 --;
-                    if (score >=100) {
+                    if (score >4000) {
+                        lock=true;
                         paused = true;
-                        score = 0;
-                        score2 = 0;
-                        lives = 3;
-                        lives2 = 3;
-                        prepareLevel();
+                        //prepareLevel();
                     }
                     if(lives2==0){
+
+                        lock=true;
                         paused = true;
-                        score = 0;
-                        score2 = 0;
-                        lives = 3;
-                        lives2 = 3;
-                        prepareLevel();
+
+                        //prepareLevel();
                     }
                 }
             }
@@ -409,20 +415,16 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
                     score2 = score2 + 50;
                     lives --;
                     if (lives==0) {
+                        lock2=true;
                         paused = true;
-                        score = 0;
-                        score2 = 0;
-                        lives = 3;
-                        lives2=3;
-                        prepareLevel();
+
+                    //    prepareLevel();
                     }
-                    if (score == numInvaders * 10) {
+                    if (score2 > 4000) {
+                        lock2=true;
                         paused = true;
-                        score = 0;
-                        score2 = 0;
-                        lives = 3;
-                        lives2=3;
-                        prepareLevel();
+
+                       // prepareLevel();
                     }
                 }
             }
@@ -440,11 +442,9 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
                     // Is it game over?
                     if(lives == 0){
                         paused = true;
-                        lives = 3;
-                        lives2=3;
-                        score = 0;
-                        score2=0;
-                        prepareLevel();
+                        lock2=true;
+
+                      //  prepareLevel();
 
                     }
                 }
@@ -455,12 +455,11 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
 
                     // Is it game over?
                     if(lives2 == 0){
+
+
                         paused = true;
-                        lives = 3;
-                        lives2=3;
-                        score = 0;
-                        score2=0;
-                        prepareLevel();
+                        lock=true;
+                        //prepareLevel();
 
                     }
                 }
@@ -528,16 +527,40 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
 
             // Draw the score and remaining lives
             // Change the brush color
+
+            if(lock==true || lock2==true){
+            canvas.drawBitmap(buttonreplay.getBitmap(), screenX/4,(screenY/4)-50, paint);
+            canvas.drawBitmap(buttongo.getBitmap(), (screenX/2)+(screenY/4),(screenY/4)-50, paint);}
+
+            if(lock==true){   paint.setColor(Color.argb(255,  255, 255, 255));
+                paint.setTextSize(81);
+                canvas.drawText("Wygrał gracz pierwszy", screenX/5 + screenX/8,screenY/2, paint);
+            }
+            if(lock2==true){   paint.setColor(Color.argb(255,  255, 255, 255));
+                paint.setTextSize(81);
+                canvas.drawText("Wygrał gracz drugi", screenX/5 + screenX/8,screenY/2, paint);
+            }
+            paint.setColor(Color.argb(255,  249, 129, 0));
+            paint.setTextSize(80);
+
+
+            if(lock==true){ canvas.drawText("Wygrał gracz pierwszy", screenX/5 + screenX/8,screenY/2, paint);}
+            if(lock2==true){ canvas.drawText("Wygrał gracz drugi", screenX/5 + screenX/8,screenY/2, paint);}
+
+
+
+
+
             paint.setColor(Color.argb(255,  249, 129, 0));
             paint.setTextSize(40);
-            canvas.drawText("Score: " + score + "   Lives: " + lives, 10,50, paint);
-            canvas.drawText("Score2: " + score2 + "   Lives: " + lives2, 10,100, paint);
+            canvas.drawText("Punkty: " + score + "   Życie: " + lives, 10,screenY-10, paint);
+            canvas.drawText("Punkty: " + score2 + "   Życie: " + lives2, 10,50, paint);
             // Draw everything to the screen
             ourHolder.unlockCanvasAndPost(canvas);
         }
     }
 
-    // If SpaceInvadersActivity is paused/stopped
+        // If SpaceInvadersActivity is pausedstopped
     // shutdown our thread.
     public void pause() {
         playing = false;
@@ -562,6 +585,31 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
         //int pointerId = event.getPointerId(pointerIndex);
+        if(paused==true && (lock==true || lock2==true)){
+            switch (motionEvent.getActionMasked() & MotionEvent.ACTION_MASK) {
+
+                case MotionEvent.ACTION_DOWN:
+                        if(motionEvent.getX()>screenX/2){
+                            paused=false;
+
+                            if(lock==true){ Game.zakoncz(context,score); }
+                            if(lock2==true){ Game.zakoncz(context, score2); }
+                            lock=false;
+                            lock2=false;
+                            //return true;
+
+                    }
+                        if(motionEvent.getX()<=screenX/2){
+                            paused=false;
+                            lock=false;
+                            lock2=false;
+                            prepareLevel();
+                            return true;
+                        }
+            }
+
+        }
+
         switch (motionEvent.getActionMasked() & MotionEvent.ACTION_MASK) {
 
             // Player has touched the screen
@@ -611,7 +659,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
                 int index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
 
                // Log.d("Controlls", "Action Pointer Down "+ pointerId);
-                Log.d("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+ motionEvent.getY(index));
+             //   Log.d("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+ motionEvent.getY(index));
                 if(motionEvent.getY(index) > screenY - (screenY / 8) && (motionEvent.getX(index) > playerShip.getX() + 200 || motionEvent.getX(index) < playerShip.getX() - 200)) {
                     if (motionEvent.getX(index) > playerShip.getX() && playerShip.getX() < screenX) {
                         playerShip.setMovementState(playerShip.RIGHT);
