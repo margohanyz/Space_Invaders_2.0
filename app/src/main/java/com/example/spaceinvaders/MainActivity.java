@@ -95,7 +95,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void openRegister()
     {
-        Intent intent = new Intent(this, SignUp.class);
+        //Intent intent = new Intent(this, SignUp.class);
+        //startActivity(intent);
+        Intent intent = new Intent(this, Game.class);
         startActivity(intent);
     }
 
