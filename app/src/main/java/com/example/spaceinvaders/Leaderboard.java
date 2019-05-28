@@ -32,7 +32,6 @@ public class Leaderboard extends AppCompatActivity {
     TextView textNick;
     TextView textScore;
 
-
     private DatabaseReference myRef;
 
     List<User> userList;

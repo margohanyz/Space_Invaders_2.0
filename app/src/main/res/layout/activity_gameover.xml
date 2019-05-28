@@ -13,25 +13,22 @@
         android:id="@+id/GameOverText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:text="GAME OVER"
         android:textColor="@color/colorAccent"
-        android:textSize="40dp" />
+        android:textSize="30dp" />
 
     <TextView
         android:id="@+id/ScoreText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:text="Your Score:"
         android:textColor="@color/colorAccent"
-        android:textSize="25dp" />
+        android:textSize="20dp" />
 
     <TextView
         android:id="@+id/Score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:text="0"
         android:textColor="@color/colorAccent"
         android:textSize="40dp" />

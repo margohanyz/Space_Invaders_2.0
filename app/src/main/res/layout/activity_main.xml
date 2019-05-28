@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
@@ -13,45 +13,35 @@
         android:id="@+id/GameName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:gravity="center"
         android:text="Space Invaders 2.0"
         android:textColor="@color/colorAccent"
-        android:textSize="25dp" />
+        android:textSize="30dp" />
 
     <Button
         android:id="@+id/bsignin"
         android:layout_width="151dp"
         android:layout_height="60dp"
-        android:layout_below="@+id/GameName"
-        android:layout_centerHorizontal="true"
         android:text="Sign in" />
 
     <Button
         android:id="@+id/bsignup"
         android:layout_width="151dp"
         android:layout_height="60dp"
-        android:layout_below="@+id/bsignin"
-        android:layout_centerHorizontal="true"
         android:text="Sign up" />
 
     <Button
         android:id="@+id/bguestmode"
         android:layout_width="151dp"
         android:layout_height="60dp"
-        android:layout_below="@id/bsignup"
-        android:layout_centerHorizontal="true"
         android:text="Guest Mode" />
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
+        android:layout_marginTop="100dp"
         ads:adSize="BANNER"
         ads:adUnitId="@string/banner_ad_unit_id">
     </com.google.android.gms.ads.AdView>
 
-</RelativeLayout>
+</LinearLayout>

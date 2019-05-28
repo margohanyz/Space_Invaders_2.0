@@ -14,35 +14,32 @@
         android:id="@+id/SignIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:text="Sign In"
         android:textColor="@color/colorAccent"
-        android:textSize="25dp" />
+        android:textSize="30dp" />
 
     <EditText
         android:id="@+id/editTextEmail"
-        android:layout_width="200dp"
-        android:layout_height="18dp"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:background="#ffffff"
         android:hint="Enter your email"
-        android:inputType="textEmailAddress"
-        android:textSize="12sp" />
+        android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/editTextPassword"
-        android:layout_width="200dp"
-        android:layout_height="18dp"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:background="#ffffff"
         android:hint="Enter password"
-        android:inputType="textPassword"
-        android:textSize="12sp" />
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/buttonLogin"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_width="151dp"
+        android:layout_height="60dp"
         android:text="Login" />
 
     <TextView
@@ -52,6 +49,6 @@
         android:text="Don't have an account yet? Sign up here."
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
-        android:textSize="10sp" />
+        android:textSize="12sp" />
 
 </LinearLayout>

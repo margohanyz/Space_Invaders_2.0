@@ -59,10 +59,9 @@ public class Game extends AppCompatActivity {
         //finish();
         Log.d("Zakoncz", String.valueOf(score));
         Intent intent = new Intent(mContext, GameOver.class);
-        String scoret = Integer.toString(score);
+        int scoret = score;
         intent.putExtra("jeden",scoret);
         mContext.startActivity(intent);
-
     }
 
 }

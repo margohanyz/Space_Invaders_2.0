@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
-    //private static final String TAG = "MainActivity";
+    private static final String TAG = "MainActivity";
 
     private AdView mAdView;
 
@@ -100,9 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void openRegister()
     {
-        //Intent intent = new Intent(this, SignUp.class);
-        //startActivity(intent);
-        Intent intent = new Intent(this, Game.class);
+        Intent intent = new Intent(this, SignUp.class);
         startActivity(intent);
     }
 
@@ -114,9 +112,9 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // go to Play panel
-                            Toast.makeText(MainActivity.this, "Guest...",Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), Play.class);
                             finish();
-                            startActivity(new Intent(getApplicationContext(), Play.class));
+                            startActivity(intent);
                         } else {
                             Toast.makeText(MainActivity.this, "Something went wrong. Please try again.",Toast.LENGTH_SHORT).show();
                         }

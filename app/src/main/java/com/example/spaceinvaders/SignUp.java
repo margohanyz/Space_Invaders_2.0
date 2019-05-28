@@ -18,6 +18,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
@@ -85,7 +90,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                     startActivity(new Intent(getApplicationContext(), Play.class));
                 }
                 else{
-                    Toast.makeText(SignUp.this, "Could not register, please try again.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUp.this, "This email is already registered!",Toast.LENGTH_SHORT).show();
                 }
             }
         });

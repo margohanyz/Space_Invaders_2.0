@@ -31,11 +31,6 @@ public class Play extends AppCompatActivity implements View.OnClickListener {
 
         // Initialize the firebase auth;
         mAuth = FirebaseAuth.getInstance();
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        String email = currentUser.getEmail();
-//        if(email == "guest@wp.pl"){
-//        signout.setText("Back");
-//        }
 
         // Set button&text
         play = (Button) findViewById(R.id.b_play);

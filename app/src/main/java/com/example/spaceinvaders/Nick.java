@@ -33,6 +33,8 @@ public class Nick extends AppCompatActivity {
     TextView B1;
     Typeface myFont;
 
+    int scores;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +43,10 @@ public class Nick extends AppCompatActivity {
         // Write a message to the database
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
+
+        // przekazanie wyniku
+        Intent intent = getIntent();
+        scores = intent.getIntExtra("jeden",0);
 
         // Set widgets
         savescore = (Button) findViewById(R.id.buttonSave);
@@ -65,13 +71,16 @@ public class Nick extends AppCompatActivity {
 
     public void saveScore() {
         String nick = edittextnick.getText().toString().trim();
-        Integer score = 134;
+        int score = scores;
 
         if (!TextUtils.isEmpty(nick)) {
             User u = new User(nick, score);
             String id = myRef.push().getKey();
             myRef.child(id).setValue(u);
             Toast.makeText(this, "Score saved!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, GameOver.class);
+            intent.putExtra("trzy", score);
+            startActivity(intent);
         } else {
             Toast.makeText(this, "Please enter a nick", Toast.LENGTH_LONG).show();
         }

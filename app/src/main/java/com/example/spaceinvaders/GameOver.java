@@ -22,7 +22,9 @@ public class GameOver extends AppCompatActivity implements View.OnClickListener{
     Button save;
     Button tryagain;
     Button back;
-    String a;
+    int score;
+    int score2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +33,8 @@ public class GameOver extends AppCompatActivity implements View.OnClickListener{
 
         Intent intent = getIntent();
 
-        a = intent.getStringExtra("jeden");
+        score = intent.getIntExtra("jeden", -1);
+        score2 = intent.getIntExtra("trzy", -1);
        // Log.d("Tojeststring", "co" + a);
         // Set widgets
         save = (Button) findViewById(R.id.b_save);
@@ -52,6 +55,14 @@ public class GameOver extends AppCompatActivity implements View.OnClickListener{
         B1.setTypeface(myFont);
         B2.setTypeface(myFont);
         B3.setTypeface(myFont);
+
+        if(score == -1){
+            myScore.setText(Integer.toString(score2));
+        }
+        if (score2 == -1) {
+            myScore.setText(Integer.toString(score));
+        }
+
 
         // Actions
         save.setOnClickListener(this);
@@ -74,26 +85,21 @@ public class GameOver extends AppCompatActivity implements View.OnClickListener{
     public void onClick(View v) {
         if(v == save)
         {
-            finish();
             Intent intent = new Intent(this, Nick.class);
+            intent.putExtra("dwa", score);
+            finish();
             startActivity(intent);
         }
 
         if(v == tryagain)
         {
-
             finish();
             Intent intent = new Intent(this, Game.class);
             startActivity(intent);
-            //Intent intent = new Intent(this, Play.class);
-            //startActivity(intent);
         }
 
         if(v == back)
         {
-            // tu gra michala
-
-            /////////////////
             finish();
             Intent intent = new Intent(this, Play.class);
             startActivity(intent);
