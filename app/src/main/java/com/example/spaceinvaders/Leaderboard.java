@@ -113,7 +113,7 @@ public class Leaderboard extends AppCompatActivity {
                     break;
                 }
                 else if (user.getScore() == x.getScore()){
-                    lista.add(lista.indexOf(x),user);
+                    lista.add(lista.indexOf(x)+1,user);
                     break;
                 }
                 else if (user.getScore() < x.getScore()){
