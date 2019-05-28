@@ -72,55 +72,50 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
 
     private int lives = 3;
     private int lives2 = 3;
-    // How menacing should the sound be?
+
     private long menaceInterval = 1000;
-    // Which menace sound should play next
+
     private boolean uhOrOh;
-    // When did we last play a menacing sound
+
     private long lastMenaceTime = System.currentTimeMillis();
     private Bitmap bMap;
-    // When the we initialize (call new()) on gameView
-    // This special constructor method runs
+
     public SpaceInvadersView(Context context, int x, int y) {
 
-        // The next line of code asks the
-        // SurfaceView class to set up our object.
-        // How kind.
+
         super(context);
         bMap = BitmapFactory.decodeResource(context.getResources(), R.drawable.heart);
-        // Make a globally available copy of the context so we can use it in another method
+
         this.context = context;
 
-        // Initialize ourHolder and paint objects
+
         ourHolder = getHolder();
         paint = new Paint();
 
         screenX = x;
         screenY = y;
 
-        // This SoundPool is deprecated but don't worry
+
         soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC,0);
 
         try{
-            // Create objects of the 2 required classes
+
             AssetManager assetManager = context.getAssets();
             AssetFileDescriptor descriptor;
 
-            // Load our fx in memory ready for use
+
             descriptor = assetManager.openFd("shoot.ogg");
             shootID = soundPool.load(descriptor, 0);
 
             descriptor = assetManager.openFd("invaderexplode.ogg");
             invaderExplodeID = soundPool.load(descriptor, 0);
 
-       //     descriptor = assetManager.openFd("damageshelter.ogg");
-     //       damageShelterID = soundPool.load(descriptor, 0);
+
 
             descriptor = assetManager.openFd("playerexplode.ogg");
             playerExplodeID = soundPool.load(descriptor, 0);
 
-           // descriptor = assetManager.openFd("damageshelter.ogg");
-         //   damageShelterID = soundPool.load(descriptor, 0);
+
 
             descriptor = assetManager.openFd("uh.ogg");
             uhID = soundPool.load(descriptor, 0);
@@ -151,13 +146,13 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
         druga = new DrugiShip(context, screenX, screenY);
         bullet = new Bullet(screenY,0);
         bullet2 = new Bullet(screenY,1);
-        // Initialize the invadersBullets array
+
 
         for(int i = 0; i < invadersBullets.length; i++){
             invadersBullets[i] = new Bullet(screenY,2);
         }
 
-        // Build an army of invaders
+
         numInvaders = 0;                //TUTAJ!!!
         for(int column = 0; column < 6; column ++ ){
             for(int row = 0; row < 2; row ++ ){
@@ -205,13 +200,13 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
     private void update(){
         paint.setColor(Color.argb(255,  249, 129, 0));
         paint.setTextSize(100);
-        // Did an invader bump into the side of the screen
+
         boolean bumped = false;
 
-        // Has the player lost
+
         boolean lost = false;
 
-        // Move the player's ship
+
         playerShip.update(fps);
         druga.update(fps);
 
@@ -525,15 +520,9 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
             }
 
 
-            // Draw the bricks if visible
-            /*for(int i = 0; i < numBricks; i++){
-                if(bricks[i].getVisibility()) {
-                    canvas.drawRect(bricks[i].getRect(), paint);
-                }
-            }*/
 
 
-            // Draw the players bullet if active
+
             if(bullet.getStatus()){
                 canvas.drawRect(bullet.getRect(), paint);
             }
@@ -541,9 +530,6 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
                 canvas.drawRect(bullet2.getRect(), paint);
             }
 
-            // Draw the invaders bullets
-
-            // Update all the invader's bullets if active
             for(int i = 0; i < invadersBullets.length; i++){
                 if(invadersBullets[i].getStatus()) {
                     canvas.drawRect(invadersBullets[i].getRect(), paint);
@@ -608,19 +594,16 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
 
     }
 
-    // If SpaceInvadersActivity is started then
-    // start our thread.
+
     public void resume() {
         playing = true;
         gameThread = new Thread(this);
         gameThread.start();
     }
 
-    // The SurfaceView class implements onTouchListener
-    // So we can override this method and detect screen touches.
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
-        //int pointerId = event.getPointerId(pointerIndex);
+
         if(paused==true && (lock==true || lock2==true)){
             switch (motionEvent.getActionMasked() & MotionEvent.ACTION_MASK) {
 
@@ -648,7 +631,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
 
         switch (motionEvent.getActionMasked() & MotionEvent.ACTION_MASK) {
 
-            // Player has touched the screen
+
             case MotionEvent.ACTION_DOWN:
 
                 paused = false;
@@ -694,8 +677,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
             case MotionEvent.ACTION_POINTER_DOWN:
                 int index = (motionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
 
-               // Log.d("Controlls", "Action Pointer Down "+ pointerId);
-             //   Log.d("Controlls", "Coordinates "+ motionEvent.getX(index) + " "+ motionEvent.getY(index));
+
                 if(motionEvent.getY(index) > screenY - (screenY / 8) && (motionEvent.getX(index) > playerShip.getX() + 200 || motionEvent.getX(index) < playerShip.getX() - 200)) {
                     if (motionEvent.getX(index) > playerShip.getX() && playerShip.getX() < screenX) {
                         playerShip.setMovementState(playerShip.RIGHT);
