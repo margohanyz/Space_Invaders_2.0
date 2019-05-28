@@ -94,7 +94,9 @@ public class Invader {
     public void setInvisible(){
         isVisible = false;
     }
-
+    public void setVisible(){
+        isVisible = true;
+    }
     public boolean change(){return change2;}
 
 
@@ -155,7 +157,7 @@ public class Invader {
 
      //   y = y + height;
 
-        shipSpeed = shipSpeed * 1.18f;
+        shipSpeed = shipSpeed;
     }
 
     public boolean takeAim(float playerShipX, float playerShipLength){

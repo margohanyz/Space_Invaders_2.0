@@ -4,11 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Picture;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.PictureDrawable;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.util.Log;
@@ -18,59 +23,43 @@ import android.view.SurfaceView;
 import android.widget.ImageView;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 public class SpaceInvadersView extends SurfaceView implements Runnable{
 
     private Context context;
-
-    // This is our thread
     private Thread gameThread = null;
     private boolean lock = false;
     private boolean lock2 = false;
-    // Our SurfaceHolder to lock the surface before we draw our graphics
     private SurfaceHolder ourHolder;
-
-    // A boolean which we will set and unset
-    // when the game is running- or not.
     private volatile boolean playing;
-
-    // Game is paused at the start
     private boolean paused = true;
-
-    // A Canvas and a Paint object
     private Canvas canvas;
     private Paint paint;
 
-    // This variable tracks the game frame rate
     private long fps;
-    //checking
-
-    // This is used to help calculate the fps
     private long timeThisFrame;
-
-    // The size of the screen in pixels
     private int screenX;
     private int screenY;
 
-    // The players ship
     private PlayerShip playerShip;
     private DrugiShip druga;
     private buttonreplay button;
     private buttongo button2;
-    // The player's bullet
+
     private Bullet bullet;
     private Bullet bullet2;
-    // The invaders bullets
+
     private Bullet[] invadersBullets = new Bullet[200];
     private int nextBullet;
     private int maxInvaderBullets = 10;
 
-    // Up to 60 invaders
-    private Invader[] invaders = new Invader[60];
+
+    private Invader[] invaders = new Invader[12];
     private int numInvaders = 0;
 
 
-    // For sound FX
+
     private SoundPool soundPool;
     private int playerExplodeID = -1;
     private int invaderExplodeID = -1;
@@ -78,10 +67,9 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
     private int uhID = -1;
     private int ohID = -1;
 
-    // The score
     private int score = 0;
     private int score2 = 0;
-    // Lives
+
     private int lives = 3;
     private int lives2 = 3;
     // How menacing should the sound be?
@@ -90,7 +78,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
     private boolean uhOrOh;
     // When did we last play a menacing sound
     private long lastMenaceTime = System.currentTimeMillis();
-
+    private Bitmap bMap;
     // When the we initialize (call new()) on gameView
     // This special constructor method runs
     public SpaceInvadersView(Context context, int x, int y) {
@@ -99,7 +87,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
         // SurfaceView class to set up our object.
         // How kind.
         super(context);
-
+        bMap = BitmapFactory.decodeResource(context.getResources(), R.drawable.heart);
         // Make a globally available copy of the context so we can use it in another method
         this.context = context;
 
@@ -149,6 +137,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
     }
 
     private void prepareLevel(){
+
         score = 0;
         score2 = 0;
         lives = 3;
@@ -169,7 +158,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
         }
 
         // Build an army of invaders
-        numInvaders = 0;
+        numInvaders = 0;                //TUTAJ!!!
         for(int column = 0; column < 6; column ++ ){
             for(int row = 0; row < 2; row ++ ){
                 if(row==0){
@@ -181,8 +170,6 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
 
 
 
-
-        // Reset the menace level
         menaceInterval = 1000;
 
     }
@@ -228,9 +215,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
         playerShip.update(fps);
         druga.update(fps);
 
-        // Update the invaders if visible
 
-        // Update the players bullet
         if(bullet.getStatus()){
             bullet.update(fps);
         }
@@ -238,21 +223,20 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
             bullet2.update(fps);
         }
 
-        // Update all the invaders bullets if active
         for(int i = 0; i < invadersBullets.length; i++){
             if(invadersBullets[i].getStatus()) {
                 invadersBullets[i].update(fps);
             }
         }
 
-        // Update all the invaders if visible
+
         for(int i = 0; i < numInvaders; i++){
             if(invaders[i].getVisibility()) {
 
-                // Move the next invader
+
                 invaders[i].update(fps);
 
-                // Does he want to take a shot?
+
                 if(invaders[i].takeAim(playerShip.getX(), playerShip.getLength()) && invaders[i].change()==true){
                     if(invadersBullets[nextBullet].shoot(invaders[i].getX() + invaders[i].getLength() / 2, invaders[i].getY(), bullet.DOWN)) {
                         nextBullet++;
@@ -270,50 +254,41 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
                     }
                 }}
 
-                // If that move caused them to bump the screen change bumped to true
+
                 if (invaders[i].getX() > screenX - invaders[i].getLength()
                         || invaders[i].getX() < 0){
 
                     bumped = true;
-
-
                 }
+
+
+
+
             }
 
         }
 
 
-        // Did an invader bump into the edge of the screen
+
         if(bumped){
-            // Move all the invaders down and change direction
+
             for(int i = 0; i < numInvaders; i++){
                 invaders[i].dropDownAndReverse();
 
-                // Have the invaders landed
-                if(invaders[i].getY() > screenY - screenY / 10){
-                    lost = true;
-                }
-
-
-
             }
 
-            // Increase the menace level
-            // By making the sounds more frequent
-            menaceInterval = menaceInterval - 80;
+            menaceInterval = menaceInterval - 30;
 
 
         }
 
 
-        if(lost){
-            prepareLevel();
-        }
 
 
 
 
-        // Has the player's bullet hit the top of the screen
+
+
         if(bullet.getImpactPointY() < 0 || bullet.getImpactPointY() > screenY){
             bullet.setInactive();
         }
@@ -321,7 +296,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
             bullet2.setInactive();
         }
 
-        // Has an invaders bullet hit the bottom of the screen
+
         for(int i = 0; i < invadersBullets.length; i++){
 
             if(invadersBullets[i].getImpactPointY() > screenY || invadersBullets[i].getImpactPointY() < 0 ){
@@ -329,7 +304,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
             }
         }
 
-        // Has the player's bullet hit an invader
+
         if(bullet.getStatus()) {
             for (int i = 0; i < numInvaders; i++) {
                 if (invaders[i].getVisibility()) {
@@ -339,7 +314,30 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
                         bullet.setInactive();
 
                             score = score + 10;
+                        boolean znajdz = false;
 
+                        for (int x = 0; x < numInvaders; x++) {
+                            if (invaders[x].getVisibility() == true) {
+                                znajdz = false;
+                                break;
+                            }
+                            if (invaders[x].getVisibility() == false) {
+                                znajdz = true;
+                            }
+                        }
+                        if(znajdz==true){
+                            numInvaders = 0;                //TUTAJ!!!
+                            for(int column = 0; column < 6; column ++ ){
+                                for(int row = 0; row < 2; row ++ ){
+                                    if(row==0){
+                                        invaders[numInvaders] = new Invader(context, row +4, column +1, screenX, (screenY),false);}
+                                    else{ invaders[numInvaders] = new Invader(context, row +4, column +1, screenX, (screenY),true);}
+                                    numInvaders ++;
+                                }
+                            }
+
+
+                        }
                         // Has the player won
                         if(score > 4000){
                             lock=true;
@@ -361,6 +359,33 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
                         bullet2.setInactive();
 
                             score2=score2 + 10;
+                         boolean znajdz = false;
+
+                        for (int x = 0; x < numInvaders; x++) {
+                            if (invaders[x].getVisibility() == true) {
+                                Log.d("znalazlem", "numer" + x + "tru");
+                                znajdz = false;
+                                break;
+                            }
+                            if (invaders[x].getVisibility() == false) {
+                                Log.d("znalazlem", "numer" + x + "fals");
+                                znajdz = true;
+                            }
+                        }
+                        if(znajdz==true){
+                            numInvaders = 0;                //TUTAJ!!!
+                            for(int column = 0; column < 6; column ++ ){
+                                for(int row = 0; row < 2; row ++ ){
+                                    if(row==0){
+                                        invaders[numInvaders] = new Invader(context, row +4, column +1, screenX, (screenY),false);}
+                                    else{ invaders[numInvaders] = new Invader(context, row +4, column +1, screenX, (screenY),true);}
+                                    numInvaders ++;
+                                }
+                            }
+
+
+                        }
+
 
                         // Has the player won
                         if(score > 4000/*numInvaders * 10*/){
@@ -470,6 +495,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
     }
 
 
+
     private void draw(){
         // Make sure our drawing surface is valid or we crash
         if (ourHolder.getSurface().isValid()) {
@@ -525,8 +551,8 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
             }
 
 
-            // Draw the score and remaining lives
-            // Change the brush color
+
+
 
             if(lock==true || lock2==true){
             canvas.drawBitmap(buttonreplay.getBitmap(), screenX/4,(screenY/4)-50, paint);
@@ -540,6 +566,8 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
                 paint.setTextSize(81);
                 canvas.drawText("Wygrał gracz drugi", screenX/5 + screenX/8,screenY/2, paint);
             }
+
+
             paint.setColor(Color.argb(255,  249, 129, 0));
             paint.setTextSize(80);
 
@@ -549,12 +577,20 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
 
 
 
-
-
             paint.setColor(Color.argb(255,  249, 129, 0));
-            paint.setTextSize(40);
-            canvas.drawText("Punkty: " + score + "   Życie: " + lives, 10,screenY-10, paint);
-            canvas.drawText("Punkty: " + score2 + "   Życie: " + lives2, 10,50, paint);
+            paint.setTextSize(80);
+            canvas.drawText("" + score , 15,screenY-10, paint);
+            for(int i=0; i<lives; i++){
+            canvas.drawBitmap(bMap, screenX - screenX/18 - (i*100), screenY - screenY/10, paint);}
+           // canvas.save();
+            canvas.scale(-1, -1);
+            canvas.drawText("" + score2, -screenX + 15,-30, paint);
+            for(int i=0; i<lives2; i++){
+                canvas.drawBitmap(bMap, -(screenX/18 + (i*100)), -(screenY/10), paint);}
+           // canvas.restore();
+
+            canvas.scale(-1, -1);
+
             // Draw everything to the screen
             ourHolder.unlockCanvasAndPost(canvas);
         }
