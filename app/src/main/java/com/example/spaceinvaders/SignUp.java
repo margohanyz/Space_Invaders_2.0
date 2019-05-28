@@ -56,6 +56,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         // Set fonts
         myFont = Typeface.createFromAsset(this.getAssets(), "Fonts/ca.ttf");
         myView.setTypeface(myFont);
+        B1.setTypeface(myFont);
         textViewSignIn.setPaintFlags(textViewSignIn.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         textViewSignIn.setTextColor(Color.parseColor("#FF6199C7"));
 

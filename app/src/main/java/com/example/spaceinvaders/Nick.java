@@ -46,7 +46,7 @@ public class Nick extends AppCompatActivity {
 
         // przekazanie wyniku
         Intent intent = getIntent();
-        scores = intent.getIntExtra("jeden",0);
+        scores = intent.getIntExtra("dwa",0);
 
         // Set widgets
         savescore = (Button) findViewById(R.id.buttonSave);

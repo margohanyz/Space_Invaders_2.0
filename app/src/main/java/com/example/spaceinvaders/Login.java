@@ -90,7 +90,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             //go to Play panel
-                            Toast.makeText(Login.this, "Successfully Logged In",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Login.this, "Successfully logged in",Toast.LENGTH_SHORT).show();
                             finish();
                             startActivity(new Intent(getApplicationContext(), Play.class));
                         }

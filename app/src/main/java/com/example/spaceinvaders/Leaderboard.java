@@ -80,7 +80,7 @@ public class Leaderboard extends AppCompatActivity {
 
                 for(DataSnapshot userSnapshot: dataSnapshot.getChildren()){
                     User user = userSnapshot.getValue(User.class);
-                    userList.add(user);
+                    addScore(userList,user);
                 }
 
                 LeaderboardList adapter = new LeaderboardList(Leaderboard.this,userList);
@@ -100,6 +100,30 @@ public class Leaderboard extends AppCompatActivity {
         finish();
         Intent intent = new Intent(this, Play.class);
         startActivity(intent);
+    }
+
+    public void addScore(List<User> lista, User user){
+        if(lista.size() == 0){
+            lista.add(user);
+        }
+        else {
+            for(User x : lista){
+                if (user.getScore() > x.getScore()){
+                    lista.add(lista.indexOf(x),user);
+                    break;
+                }
+                else if (user.getScore() == x.getScore()){
+                    lista.add(lista.indexOf(x),user);
+                    break;
+                }
+                else if (user.getScore() < x.getScore()){
+                    if(lista.indexOf(x) == lista.size()-1){
+                        lista.add(user);
+                        break;
+                    }
+                }
+            }
+        }
     }
 }
 

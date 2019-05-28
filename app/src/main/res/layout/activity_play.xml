@@ -14,15 +14,16 @@
         android:id="@+id/GameName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:text="Space Invaders 2.0"
         android:textColor="@color/colorAccent"
-        android:textSize="30dp" />
+        android:textSize="50dp"
+        android:textAlignment="center" />
 
     <Button
         android:id="@+id/b-play"
         android:layout_width="151dp"
         android:layout_height="60dp"
+        android:layout_marginTop="20dp"
         android:text="Play" />
 
     <Button
