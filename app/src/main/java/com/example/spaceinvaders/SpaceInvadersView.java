@@ -486,6 +486,12 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
             }
         }
 
+        if(druga.getX()<screenX/30 || druga.getX()> screenX-screenX/10){
+            druga.setMovementState(druga.STOPPED);}
+
+        if(playerShip.getX()<screenX/30 || playerShip.getX()> screenX-screenX/10){
+            playerShip.setMovementState(playerShip.STOPPED);}
+
 
     }
 
@@ -504,8 +510,8 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
             paint.setColor(Color.argb(255,  255, 255, 255));
 
             // Now draw the player spaceship
-            canvas.drawBitmap(playerShip.getBitmap(), playerShip.getX(), screenY - 50, paint);
-            canvas.drawBitmap(druga.getBitmap(), druga.getX(), -50, paint);
+            canvas.drawBitmap(playerShip.getBitmap(), playerShip.getX(), screenY - screenY/20, paint);
+            canvas.drawBitmap(druga.getBitmap(), druga.getX(), -screenY/20, paint);
 
 
             // Draw the invaders
@@ -541,21 +547,21 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
 
 
             if(lock==true || lock2==true){
-            canvas.drawBitmap(buttonreplay.getBitmap(), screenX/4,(screenY/4)-50, paint);
-            canvas.drawBitmap(buttongo.getBitmap(), (screenX/2)+(screenY/4),(screenY/4)-50, paint);}
+            canvas.drawBitmap(buttonreplay.getBitmap(), screenX/4,(screenY/4)-screenY/20, paint);
+            canvas.drawBitmap(buttongo.getBitmap(), (screenX/2)+(screenY/4),(screenY/4)-screenY/20, paint);}
 
             if(lock==true){   paint.setColor(Color.argb(255,  255, 255, 255));
-                paint.setTextSize(81);
+                paint.setTextSize((screenY/15) + 1);
                 canvas.drawText("Wygrał gracz pierwszy", screenX/5 + screenX/8,screenY/2, paint);
             }
             if(lock2==true){   paint.setColor(Color.argb(255,  255, 255, 255));
-                paint.setTextSize(81);
+                paint.setTextSize((screenY/15) + 1);
                 canvas.drawText("Wygrał gracz drugi", screenX/5 + screenX/8,screenY/2, paint);
             }
 
 
             paint.setColor(Color.argb(255,  249, 129, 0));
-            paint.setTextSize(80);
+            paint.setTextSize(screenY/15);
 
 
             if(lock==true){ canvas.drawText("Wygrał gracz pierwszy", screenX/5 + screenX/8,screenY/2, paint);}
@@ -636,7 +642,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
 
                 paused = false;
 
-                if(motionEvent.getY() > screenY - (screenY / 8) && (motionEvent.getX() > playerShip.getX() + 200 || motionEvent.getX() < playerShip.getX() - 200)) {
+                if(motionEvent.getY() > screenY - (screenY / 8) && (motionEvent.getX() > playerShip.getX() + 150 || motionEvent.getX() < playerShip.getX() - 150)) {
                     if (motionEvent.getX() > playerShip.getX() && playerShip.getX() < screenX) {
                         playerShip.setMovementState(playerShip.RIGHT);
 
@@ -646,7 +652,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
                     }
 
                 }
-                if(motionEvent.getY() < screenY - 7*(screenY / 8)&& (motionEvent.getX() > druga.getX() + 200 || motionEvent.getX() < druga.getX() - 200)) {
+                if(motionEvent.getY() < screenY - 7*(screenY / 8)&& (motionEvent.getX() > druga.getX() + 150 || motionEvent.getX() < druga.getX() - 150)) {
                     if (motionEvent.getX() > druga.getX()){
                     druga.setMovementState(druga.RIGHT);}
                     else { druga.setMovementState(druga.LEFT);
@@ -657,14 +663,14 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
                 {}
 
 
-                if(motionEvent.getY() > screenY - screenY / 8 && motionEvent.getX() < playerShip.getX() + 200 && motionEvent.getX() > playerShip.getX() - 200) {
+                if(motionEvent.getY() > screenY - screenY / 8 && motionEvent.getX() < playerShip.getX() + 150 && motionEvent.getX() > playerShip.getX() - 150) {
                     // Shots fired
                     if(bullet.shoot(playerShip.getX()+ playerShip.getLength()/2,screenY,bullet.UP)){
                         soundPool.play(shootID, 1, 1, 0, 0, 1);
                     }
                 }
 
-                if(motionEvent.getY()< screenY - 7*(screenY / 8) && motionEvent.getX() < druga.getX() + 200 && motionEvent.getX() > druga.getX() - 200) {
+                if(motionEvent.getY()< screenY - 7*(screenY / 8) && motionEvent.getX() < druga.getX() + 150 && motionEvent.getX() > druga.getX() - 150) {
                     // Shots fired
                     if(bullet2.shoot(druga.getX()+ druga.getLength()/2,0,bullet2.DOWN)){
                         soundPool.play(shootID, 1, 1, 0, 0, 1);
@@ -719,8 +725,19 @@ public class SpaceInvadersView extends SurfaceView implements Runnable{
             case MotionEvent.ACTION_UP:
 
                 //if(motionEvent.getY() > screenY - screenY / 10) {
-                    playerShip.setMovementState(playerShip.STOPPED);
-                    druga.setMovementState(playerShip.STOPPED);
+                    if(motionEvent.getY()>screenY/2){
+                    //    Log.d("lodka", "miejsce" + motionEvent.getY());
+                    playerShip.setMovementState(playerShip.STOPPED);}
+                if(motionEvent.getY()<=screenY/2){
+                    druga.setMovementState(playerShip.STOPPED);}
+                //}
+                break;
+            case MotionEvent.ACTION_POINTER_UP:
+                if(motionEvent.getY()>screenY/2){
+                  //  Log.d("lodka", "miejsce" + motionEvent.getY());
+                    playerShip.setMovementState(playerShip.STOPPED);}
+                if(motionEvent.getY()<=screenY/2){
+                    druga.setMovementState(playerShip.STOPPED);}
                 //}
                 break;
         }
